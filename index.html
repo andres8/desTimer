@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      p {
+        text-align: center;
+        font-size: 60px;
+        margin-top: 0px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1 class="text-center mt-3">Toast Master DES Timer</h1>
+
+    <div>
+      <button onclick="setMin2()">2 min</button>
+      <button onclick="setMin5()">5 min</button>
+      <button onclick="two()" id="btnP">Start</button>
+      <button onclick="twoR()">Reset</button>
+      <span id="time">00:00</span>
+    </div>
+
+    <script>
+      var myInterval = -1,
+        fiveMinutes,
+        button = document.getElementById("btnP"),
+        displayTime = document.getElementById("time");
+      function startTimer(duration, display) {
+        var timer = duration,
+          minutes,
+          seconds;
+
+        if (myInterval == -1) {
+          button.innerHTML = "Pause";
+          myInterval = setInterval(function () {
+            minutes = parseInt(timer / 60, 10);
+            seconds = parseInt(timer % 60, 10);
+
+            minutes = minutes < 10 ? "0" + minutes : minutes;
+            seconds = seconds < 10 ? "0" + seconds : seconds;
+
+            display.textContent = minutes + ":" + seconds;
+            console.log(duration);
+            --timer;
+            if (timer < 0) {
+              clearInterval();
+            }
+            console.log(duration);
+            console.log(timer);
+          }, 1000);
+        } else {
+          button.innerHTML = "Start";
+          clearInterval(myInterval);
+          myInterval = -1;
+        }
+      }
+      function setMin2() {
+        fiveMinutes = 60 * 2;
+        displayTime.innerHTML = "02:00";
+      }
+      function setMin5() {
+        fiveMinutes = 60 * 5;
+        displayTime.innerHTML = "05:00";
+      }
+      function twoR() {
+        clearInterval(myInterval);
+        button.innerHTML = "Start";
+        myInterval = -1;
+        displayTime.innerHTML = "00:00";
+      }
+      function two() {
+        var display = document.querySelector("#time");
+        startTimer(fiveMinutes, display);
+      }
+    </script>
+  </body>
+</html>
