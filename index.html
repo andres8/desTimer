@@ -14,6 +14,12 @@
         font-size: 60px;
         margin-top: 0px;
       }
+      #color {
+        width: 300px;
+        height: 300px;
+        padding: 50px;
+        margin: 20px;
+      }
     </style>
   </head>
   <body>
@@ -26,34 +32,51 @@
       <button onclick="twoR()">Reset</button>
       <span id="time">00:00</span>
     </div>
-
+    <div id="color"></div>
+    <audio id="sound" src=""></audio>
     <script>
       var myInterval = -1,
         fiveMinutes,
+        timer,
         button = document.getElementById("btnP"),
         displayTime = document.getElementById("time");
       function startTimer(duration, display) {
-        var timer = duration,
-          minutes,
-          seconds;
+        //var timer = duration,
+        var minutes,
+          seconds,
+          color = document.getElementById("color");
 
         if (myInterval == -1) {
           button.innerHTML = "Pause";
           myInterval = setInterval(function () {
             minutes = parseInt(timer / 60, 10);
             seconds = parseInt(timer % 60, 10);
-
             minutes = minutes < 10 ? "0" + minutes : minutes;
             seconds = seconds < 10 ? "0" + seconds : seconds;
 
             display.textContent = minutes + ":" + seconds;
-            console.log(duration);
             --timer;
-            if (timer < 0) {
+            if (minutes == 0 && timer > 30) {
+              color.style.backgroundColor = "green";
+            } else if (timer <= 30 && seconds <= 30 && timer > 0) {
+              color.style.backgroundColor = "yellow";
+            } else if (timer < 0) {
+              color.style.backgroundColor = "red";
+              displayTime.innerHTML = "Time's Up";
               clearInterval();
             }
-            console.log(duration);
-            console.log(timer);
+            if (timer < 61 && timer > 58) {
+              console.log(timer);
+              playSound("HornHonk.wav");
+            }
+            if (timer < 31 && timer > 28) {
+              console.log(timer);
+              playSound("BikeHorn.wav");
+            }
+            if (timer < 1 && timer > -2) {
+              console.log(timer);
+              playSound("AirHorn.wav");
+            }
           }, 1000);
         } else {
           button.innerHTML = "Start";
@@ -62,11 +85,13 @@
         }
       }
       function setMin2() {
-        fiveMinutes = 60 * 2;
+        fiveMinutes = 60 * 2 - 1;
+        timer = fiveMinutes;
         displayTime.innerHTML = "02:00";
       }
       function setMin5() {
-        fiveMinutes = 60 * 5;
+        fiveMinutes = 60 * 5 - 1;
+        timer = fiveMinutes;
         displayTime.innerHTML = "05:00";
       }
       function twoR() {
@@ -74,10 +99,19 @@
         button.innerHTML = "Start";
         myInterval = -1;
         displayTime.innerHTML = "00:00";
+        color.style.backgroundColor = "white";
       }
       function two() {
         var display = document.querySelector("#time");
         startTimer(fiveMinutes, display);
+        //var test = document.getElementById("sound");
+      }
+      function playSound(url) {
+        var sound = document.getElementById("sound");
+        sound.src = url;
+        sound.load();
+        console.log(sound);
+        sound.play();
       }
     </script>
   </body>
